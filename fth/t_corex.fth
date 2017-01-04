@@ -330,5 +330,12 @@ T{ s" unknown-query-string" ENVIRONMENT? }T{ FALSE }T
 T{ s" MAX-CHAR" ENVIRONMENT? }T{ 255 TRUE }T
 T{ s" ADDRESS-UNITS-BITS" ENVIRONMENT? }T{ 8 TRUE }T
 
+\ ------------------------------------------------------ BUFFER:
+
+T{ 8 BUFFER: BUF:TEST }T{ }T
+T{ BUF:TEST DUP ALIGNED = }T{ TRUE }T
+T{ 111 BUF:TEST ! 222 BUF:TEST CELL+ ! }T{ }T
+T{ BUF:TEST @ BUF:TEST CELL+ @ }T{ 111 222 }T
+
 }TEST
 

@@ -27,6 +27,7 @@ include? [if]    condcomp.fth
 include? save-input save-input.fth
 include? read-line  file.fth
 include? require    require.fth
+include? buffer:    buffer-colon.fth
 
 \ load floating point support if basic support is in kernel
 exists? F*

@@ -269,4 +269,12 @@ private{
     2drop false
 ;
 
+\ Simple implementation. Could probably be done more efficiently.
+: +FIELD  ( n1 n2 "name" -- n1+n2 ; Exec: addr -- 'addr )
+    CREATE
+        over , +
+    DOES>
+        @ +
+;
+
 privatize
