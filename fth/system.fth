@@ -653,17 +653,20 @@ ustack 0stackp
         THEN
 ; immediate
 
+defer SAVE-STRING ( c-addr u -- $string )
+:noname ( c-addr u -- ) pad place pad ; IS save-string
+
 : C"    ( <string> -- addr , return string address, ANSI )
         state @
         IF compile (c")   ,"
-        ELSE [char] " parse pad place pad
+        ELSE [char] " parse save-string
         THEN
 ; immediate
 
 : S"    ( <string> -- , -- addr , return string address, ANSI )
         state @
         IF compile (s")   ,"
-        ELSE [char] " parse pad place pad count
+        ELSE [char] " parse save-string count
         THEN
 ; immediate
 
@@ -680,7 +683,7 @@ ustack 0stackp
                 compile (C")
                 bl parse-word  ",
         ELSE
-                bl parse-word pad place pad
+                bl parse-word save-string
         THEN
 ; immediate
 
