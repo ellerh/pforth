@@ -337,5 +337,34 @@ T{ BUF:TEST DUP ALIGNED = }T{ TRUE }T
 T{ 111 BUF:TEST ! 222 BUF:TEST CELL+ ! }T{ }T
 T{ BUF:TEST @ BUF:TEST CELL+ @ }T{ 111 222 }T
 
-}TEST
+\ ------------------------------------------------------ PARSE-NAME
 
+\ TESTING PARSE-NAME  (Forth 2012)
+\ Adapted from the PARSE-NAME RfD tests
+
+: STR1  S" abcd" ;  : STR2  S" abcde" ;
+: STR3  S" abCd" ;  : STR4  S" wbcd"  ;
+: s= compare 0= ;
+
+T{ PARSE-NAME abcd  STR1  S= }T{ TRUE }T        \ No leading spaces
+T{ PARSE-NAME      abcde STR2 S= }T{ TRUE }T    \ Leading spaces
+
+\ Test empty parse area, new lines are necessary
+T{ PARSE-NAME
+  NIP }T{ 0 }T
+\ Empty parse area with spaces after PARSE-NAME
+T{ PARSE-NAME         
+  NIP }T{ 0 }T
+
+T{ : PARSE-NAME-TEST ( "name1" "name2" -- n )
+    PARSE-NAME PARSE-NAME S= ; }T{ }T
+T{ PARSE-NAME-TEST abcd abcd  }T{ TRUE }T
+T{ PARSE-NAME-TEST abcd   abcd  }T{ TRUE }T  \ Leading spaces
+T{ PARSE-NAME-TEST abcde abcdf }T{ FALSE }T
+T{ PARSE-NAME-TEST abcdf abcde }T{ FALSE }T
+T{ PARSE-NAME-TEST abcde abcde
+   }T{ TRUE }T         \ Parse to end of line
+T{ PARSE-NAME-TEST abcde           abcde         
+   }T{ TRUE }T         \ Leading and trailing spaces
+
+}TEST

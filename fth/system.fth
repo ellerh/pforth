@@ -584,6 +584,9 @@ ustack 0stackp
    >r  source tuck >in @ /string  r@ skip over swap r> scan
    >r  over -  rot r>  dup 0<> + - >in !
 ;
+
+: PARSE-NAME ( "<spaces>name<space>" -- c-addr u ) bl parse-word ;
+
 : PARSE   ( char -- addr len )
    >r  source >in @  /string  over swap  r> scan
    >r  over -  dup r> 0<>  -  >in +!
