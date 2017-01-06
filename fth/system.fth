@@ -573,6 +573,10 @@ ustack 0stackp
         THEN
 ; immediate
 
+: ACTION-OF ( "name" -- xt ) [compile] what's ; immediate
+: DEFER! ( xt2 xt1 -- ) (is) ;
+: DEFER@ ( xt1 -- xt2 ) (what's) ;
+
 : /STRING   ( addr len n -- addr' len' )
    over min  rot over   +  -rot  -
 ;

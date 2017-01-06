@@ -367,4 +367,38 @@ T{ PARSE-NAME-TEST abcde abcde
 T{ PARSE-NAME-TEST abcde           abcde         
    }T{ TRUE }T         \ Leading and trailing spaces
 
+\ -----------------------------------------------------------------------------
+\ TESTING DEFER DEFER@ DEFER! IS ACTION-OF (Forth 2012)
+\ Adapted from the Forth 200X RfD tests
+
+T{ DEFER DEFER1 }T{ }T
+T{ : MY-DEFER DEFER ; }T{ }T
+T{ : IS-DEFER1 IS DEFER1 ; }T{ }T
+T{ : ACTION-DEFER1 ACTION-OF DEFER1 ; }T{ }T
+T{ : DEF! DEFER! ; }T{ }T
+T{ : DEF@ DEFER@ ; }T{ }T
+
+T{ ' * ' DEFER1 DEFER! }T{ }T
+T{ 2 3 DEFER1 }T{ 6 }T
+T{ ' DEFER1 DEFER@ }T{ ' * }T
+T{ ' DEFER1 DEF@ }T{ ' * }T
+T{ ACTION-OF DEFER1 }T{ ' * }T
+T{ ACTION-DEFER1 }T{ ' * }T
+T{ ' + IS DEFER1 }T{ }T
+T{ 1 2 DEFER1 }T{ 3 }T
+T{ ' DEFER1 DEFER@ }T{ ' + }T
+T{ ' DEFER1 DEF@ }T{ ' + }T
+T{ ACTION-OF DEFER1 }T{ ' + }T
+T{ ACTION-DEFER1 }T{ ' + }T
+T{ ' - IS-DEFER1 }T{ }T
+T{ 1 2 DEFER1 }T{ -1 }T
+T{ ' DEFER1 DEFER@ }T{ ' - }T
+T{ ' DEFER1 DEF@ }T{ ' - }T
+T{ ACTION-OF DEFER1 }T{ ' - }T
+T{ ACTION-DEFER1 }T{ ' - }T
+
+T{ MY-DEFER DEFER2 }T{ }T
+T{ ' DUP IS DEFER2 }T{ }T
+T{ 1 DEFER2 }T{ 1 1 }T
+
 }TEST
