@@ -401,4 +401,16 @@ T{ MY-DEFER DEFER2 }T{ }T
 T{ ' DUP IS DEFER2 }T{ }T
 T{ 1 DEFER2 }T{ 1 1 }T
 
+\ -----------------------------------------------------------------------------
+\ TESTING HOLDS  (Forth 2012)
+
+: HTEST S" Testing HOLDS" ;
+: HTEST2 S" works" ;
+: HTEST3 S" Testing HOLDS works 123" ;
+T{ 0 0 <#  HTEST HOLDS #> HTEST S= }T{ TRUE }T
+T{ 123 0 <# #S BL HOLD HTEST2 HOLDS BL HOLD HTEST HOLDS #>
+   HTEST3 S= }T{ TRUE }T
+T{ : HLD HOLDS ; }T{ }T
+T{ 0 0 <#  HTEST HLD #> HTEST S= }T{ TRUE }T
+
 }TEST

@@ -166,6 +166,12 @@ variable HLD    \ points to last character added
     -1 hld  +!
     hld @  c!
 ;
+: HOLDS ( addr u -- )
+    BEGIN dup WHILE
+        1- 2dup + c@ hold
+    REPEAT
+    2drop
+;
 : <#     ( -- , setup conversion )
     pad hld !
 ;
