@@ -413,4 +413,12 @@ T{ 123 0 <# #S BL HOLD HTEST2 HOLDS BL HOLD HTEST HOLDS #>
 T{ : HLD HOLDS ; }T{ }T
 T{ 0 0 <#  HTEST HLD #> HTEST S= }T{ TRUE }T
 
+\ -----------------------------------------------------------------------------
+\ TESTING REFILL SOURCE-ID
+\ REFILL and SOURCE-ID from the user input device can't be tested from a file,
+\ can only be tested from a string via EVALUATE
+
+T{ : RF1  S" REFILL" EVALUATE ; RF1 }T{ FALSE }T
+T{ : SID1  S" SOURCE-ID" EVALUATE ; SID1 }T{ -1 }T
+
 }TEST

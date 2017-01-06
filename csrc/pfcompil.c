@@ -1149,6 +1149,13 @@ cell_t ffRefill( void )
     cell_t Num;
     cell_t Result = 1;
 
+    /* input from EVALUATE? */
+    if ( gCurrentTask->td_InputStream == NULL )
+    {
+	Result = -1;
+	goto error;
+    }
+
 /* reset >IN for parser */
     gCurrentTask->td_IN = 0;
 
