@@ -25,6 +25,7 @@ include? fm/mod  math.fth
 include? task-misc2.fth misc2.fth
 include? [if]    condcomp.fth
 include? save-input save-input.fth
+include? s\"        escstring.fth
 include? read-line  file.fth
 include? require    require.fth
 include? buffer:    buffer-colon.fth
