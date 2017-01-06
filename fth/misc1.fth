@@ -160,11 +160,12 @@ variable CLOSEST-XT
     >in @ >r
     0 >in !
 \ interpret the string
-    interpret
+    ['] interpret catch
 \ restore input state
     pop-source-id drop
     r> >in !
     r> r> set-source
+    throw
 ;
 
 : \S ( -- , comment out rest of file )

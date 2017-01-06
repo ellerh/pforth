@@ -138,6 +138,7 @@ typedef long off_t;
         ExceptionReturnCode = (ThrowCode)(err); \
         TORPTR = InitialReturnStack; /* Will cause return to 'C' */ \
         STKPTR = InitialDataStack; \
+        TOS = STKPTR[-1]; \
         FP_STKPTR = InitialFloatStack; \
     }
 #else
@@ -146,6 +147,7 @@ typedef long off_t;
         ExceptionReturnCode = (err); \
         TORPTR = InitialReturnStack; /* Will cause return to 'C' */ \
         STKPTR = InitialDataStack; \
+        TOS = STKPTR[-1]; \
     }
 #endif
 
