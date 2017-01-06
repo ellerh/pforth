@@ -142,6 +142,7 @@ test: $(PFORTHAPP)
 	wd=$$(pwd); (cd $(FTHDIR); $(WINE) $${wd}/$(PFORTHAPP) -q t_floats.fth)
 	wd=$$(pwd); (cd $(FTHDIR); $(WINE) $${wd}/$(PFORTHAPP) -q t_file.fth)
 	wd=$$(pwd); (cd $(FTHDIR); $(WINE) $${wd}/$(PFORTHAPP) -q t_exception.fth)
+	wd=$$(pwd); (cd $(FTHDIR); $(WINE) $${wd}/$(PFORTHAPP) -q t_facility.fth)
 
 clean:
 	rm -f $(PFOBJS) $(PFEMBOBJS)

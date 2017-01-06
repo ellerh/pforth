@@ -23,6 +23,7 @@ include? (local) ansilocs.fth
 include? {       locals.fth
 include? fm/mod  math.fth
 include? task-misc2.fth misc2.fth
+include? +field  struct.fth
 include? [if]    condcomp.fth
 include? save-input save-input.fth
 include? s\"        escstring.fth
