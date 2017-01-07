@@ -1,5 +1,6 @@
 \ @(#) $M$ 98/01/26 1.2
-\ standard { v0 v1 ... vn | l0 l1 .. lm -- } syntax
+\ Locals with Forth 2012 {: ... :} syntax
+\ and traditional pForth { v0 v1 ... vn | l0 l1 .. lm -- } syntax
 \ based on ANSI basis words (LOCAL) and TO
 \
 \ Author: Phil Burk
@@ -62,7 +63,7 @@ variable loc-done
         THEN
         loc-done @
     UNTIL
-    0 0 (local)
+    (last-local)
 ; immediate
 
 privatize
@@ -75,3 +76,60 @@ privatize
     v1 v2 + -> l1
     l1 . l2 . cr
 ;
+
+\ -----------------------------------------------------------------------
+\ Forth 2012 locals with {: :} syntax
+\ Implementation comes from Forth 2012 standard with minor modifications.
+
+private{
+
+\ Initial value of vars after |
+123456 constant UNDEFINED-VALUE
+
+: MATCH-OR-END? ( c-addr1 u1 c-addr2 u2 -- f )
+    2 pick 0= >r compare 0= r> or ;
+
+: SCAN-ARGS ( 0 c-addr1 u1 -- c-addr1 u1 ... c-addrn un n c-addrn+1 un+1 )
+    BEGIN
+        2dup s" |" match-or-end? IF EXIT THEN
+        2dup s" --" match-or-end? IF EXIT THEN
+        2dup s" :}" match-or-end? IF EXIT THEN
+        rot 1+ parse-name
+    AGAIN
+;
+
+: SCAN-locals ( n c-addr1 u1 -- c-addr1 u1 ... c-addrn un n c-addrn+1 un+1 )
+    2dup s" |" compare 0<> IF EXIT THEN
+    2drop parse-name
+    BEGIN
+        2dup s" --" match-or-end? IF EXIT THEN
+        2dup s" :}" match-or-end? IF EXIT THEN
+        rot 1+ parse-name
+        postpone undefined-value
+    AGAIN
+;
+
+: SCAN-end ( c-addr1 u1 -- c-addr2 u2 )
+    BEGIN
+        2dup s" :}" match-or-end? 0=
+    WHILE
+        2drop parse-name
+    REPEAT
+;
+
+: DEFINE-LOCALS ( c-addr1 u1 ... c-addrn un n -- )
+    0 ?DO
+        (local)
+    LOOP
+    0 0 (local)
+;
+
+}private
+
+: {: ( -- )
+    0 parse-name
+    scan-args scan-locals scan-end
+    2drop define-locals
+; immediate
+
+privatize

@@ -261,10 +261,10 @@ private{
     s" MAX-UD"      max-u max-u 2env= if exit then
     s" RETURN-STACK-CELLS"   512 env= if exit then \ DEFAULT_RETURN_DEPTH
     s" STACK-CELLS"          512 env= if exit then \ DEFAULT_USER_DEPTH
+    s" #LOCALS"               16 env= if exit then
     \ FIXME: maybe define those:
     \ s" FLOATING-STACK"
     \ s" MAX-FLOAT"
-    \ s" #LOCALS"
     \ s" WORDLISTS"
     2drop false
 ;

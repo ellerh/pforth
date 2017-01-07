@@ -40,9 +40,32 @@ variable LV-#NAMES   \ number of names currently defined
     lv-#names @ 0
     ?DO  i lv-names
         over $=
-        IF  2drop true i LEAVE
+        IF  2drop true lv-#names @ 1- i - LEAVE
         THEN
     LOOP swap
+;
+
+\ Swap the contents of names at C-ADDR1 and C-ADDR2
+: LV.SWAP ( c-addr1 c-addr2 -- )
+    lv_max_chars 0
+    ?DO
+        over i chars + c@       ( a1 a2 char1 )
+        over i chars + c@       ( a1 a2 char1 char2 )
+        swap                    ( a1 a2 char2 char1 )
+        2 pick i chars + c!     ( a1 a2 char2 )
+        2 pick i chars + c!     ( a1 a2 )
+    LOOP
+    2drop
+;
+
+\ Reverse the order of the names in LV-NAMES.
+: LV.REVERSE  ( -- )
+    lv-#names @ 2/ 0
+    ?DO
+        i lv-names                             ( addr-i )
+        lv-#names @ 1- i - lv-names            ( addr-i addr-j )
+        lv.swap
+    LOOP
 ;
 
 : LV.COMPILE.FETCH  ( index -- )
@@ -110,6 +133,17 @@ variable LV-#NAMES   \ number of names currently defined
 
 if.forgotten lv.term
 
+\ Last local. Finish building local stack frame.
+: LAST-LOCAL ( -- )
+    lv-#names @ dup 0=  \ fixed 10/27/99, Thanks to John Providenza
+    IF
+        drop ." (LOCAL) - Warning: no locals defined!" cr
+    ELSE
+        [compile] literal   compile (local.entry)
+        ['] lv.compile.local local-compiler !
+    THEN
+;
+
 }private
 
 : (LOCAL)  ( adr len -- , ANSI local primitive )
@@ -127,18 +161,17 @@ if.forgotten lv.term
         THEN
         1 lv-#names +!
     ELSE
-\ Last local. Finish building local stack frame.
         2drop
-        lv-#names @ dup 0=  \ fixed 10/27/99, Thanks to John Providenza
-        IF
-            drop ." (LOCAL) - Warning: no locals defined!" cr
-        ELSE
-            [compile] literal   compile (local.entry)
-            ['] lv.compile.local local-compiler !
-        THEN
+        last-local
     THEN
 ;
 
+\ This is like 0 0 (LOCAL), but it assigns names to stack values in
+\ the reverse order.
+: (LAST-LOCAL) ( -- )
+    lv.reverse
+    last-local
+;
 
 : VALUE
     CREATE ( n <name> )

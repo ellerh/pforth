@@ -138,6 +138,7 @@ test: $(PFORTHAPP)
 	wd=$$(pwd); (cd $(FTHDIR); $${wd}/$(PFORTHAPP) -q t_file.fth)
 	wd=$$(pwd); (cd $(FTHDIR); $${wd}/$(PFORTHAPP) -q t_exception.fth)
 	wd=$$(pwd); (cd $(FTHDIR); $${wd}/$(PFORTHAPP) -q t_facility.fth)
+	wd=$$(pwd); (cd $(FTHDIR); $${wd}/$(PFORTHAPP) -q t_locals2.fth)
 
 clean:
 	rm -f $(PFOBJS) $(PFEMBOBJS)
