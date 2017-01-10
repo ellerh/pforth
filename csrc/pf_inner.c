@@ -1702,6 +1702,18 @@ DBUG(("XX ah,m,l = 0x%8x,%8x,%8x - qh,l = 0x%8x,%8x\n", ah,am,al, qh,ql ));
             *STKPTR = Scratch;
             endcase;
 
+#ifndef PF_NO_SHELL
+        case ID_SYNONYM:   /* ( c-addr1 u1 c-addr2 u2 -- err ) */
+            {
+                ucell_t OldLen = TOS;
+                char *OldAddr = (char *)M_POP;
+                ucell_t NewLen = M_POP;
+                char *NewAddr = (char *)M_POP;
+                TOS = ffSynonym( NewAddr, NewLen, OldAddr, OldLen );
+            }
+            endcase;
+#endif
+
         case ID_TEST1:
             PUSH_TOS;
             M_PUSH( 0x11 );

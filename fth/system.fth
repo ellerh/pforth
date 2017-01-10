@@ -724,6 +724,12 @@ defer SAVE-STRING ( c-addr u -- $string )
     THEN
 ; immediate
 
+: SYNONYM ( "new" "old" -- )
+    bl parse-word
+    bl parse-word
+    (synonym) throw
+;
+
 \ -----------------------------------------------------------------
 \ Auto Initialization
 : AUTO.INIT  ( -- )

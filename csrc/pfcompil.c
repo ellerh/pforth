@@ -349,6 +349,7 @@ PForthDictionary pfBuildDictionary( cell_t HeaderSize, cell_t CodeSize )
     CreateDicEntryC( ID_SOURCE_LINE_NUMBER_FETCH, "SOURCE-LINE-NUMBER@",  0 );
     CreateDicEntryC( ID_SOURCE_LINE_NUMBER_STORE, "SOURCE-LINE-NUMBER!",  0 );
     CreateDicEntryC( ID_SWAP, "SWAP",  0 );
+    CreateDicEntryC( ID_SYNONYM, "(SYNONYM)", 0);
     CreateDicEntryC( ID_TEST1, "TEST1",  0 );
     CreateDicEntryC( ID_TEST2, "TEST2",  0 );
     CreateDicEntryC( ID_TICK, "'", 0 );
@@ -695,6 +696,37 @@ void ffFinishSecondary( void )
 {
     CODE_COMMA( ID_EXIT );
     ffUnSmudge();
+}
+
+/* Implementation of SYNONYM.  The string NEWADDR/NEWLEN is the name
+ * of the new definition and the string OLDADDR/OLDLEN the name of the
+ * existing definition.  This performs some checks, then creates a
+ * dictionary entry with the new name but the same execution token and
+ * same flags as the existing definition.
+ */
+ThrowCode ffSynonym( const char *NewAddr, ucell_t NewLen,
+                     const char *OldAddr, ucell_t OldLen )
+{
+    ForthStringPtr New = gScratch;
+    ForthStringPtr Old = New + 1 + NewLen ;
+    if( NewLen > 31 ) return THROW_DEFINITION_NAME_TOO_LONG;
+    if( NewLen + 1 + OldLen + 1 > sizeof(gScratch))
+    {
+        return THROW_PARSED_STRING_OVERFLOW;
+    }
+    New[0] = NewLen;
+    Old[0] = OldLen;
+    pfCopyMemory( New + 1, NewAddr, NewLen );
+    pfCopyMemory( Old + 1, OldAddr, OldLen );
+    {
+        ExecToken XT;
+        cell_t Flag = ffFind( Old, &XT );
+        if( Flag == 0 ) return THROW_UNDEFINED_WORD;
+        if( ffCheckDicRoom() ) return THROW_DICTIONARY_OVERFLOW;
+        CheckRedefinition( New );
+        CreateDicEntry( XT, New, (Flag == 1) ? FLAG_IMMEDIATE : 0 );
+        return 0;
+   }
 }
 
 /**************************************************************/

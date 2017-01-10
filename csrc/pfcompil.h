@@ -55,6 +55,7 @@ void  ffFinishSecondary( void );
 void  ffLiteral( cell_t Num );
 void  ffStringCreate( ForthStringPtr FName);
 void  ffStringDefer( const ForthStringPtr FName, ExecToken DefaultXT );
+ThrowCode ffSynonym( const char*, ucell_t, const char *, ucell_t );
 void  pfHandleIncludeError( void );
 
 ThrowCode ffSemiColon( void );

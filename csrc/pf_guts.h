@@ -283,7 +283,8 @@ enum cforth_primitive_ids
     ID_FILE_DELETE,
     ID_FILE_FLUSH,		/* FLUSH-FILE */
     ID_FILE_RENAME,		/* (RENAME-FILE) */
-    ID_FILE_RESIZE,		/* RESIZE-FILE */
+    ID_FILE_RESIZE,             /* (RESIZE-FILE) */
+    ID_SYNONYM,                 /* (SYNONYM) */
 /* If you add a word here, take away one reserved word below. */
 #ifdef PF_SUPPORT_FP
 /* Only reserve space if we are adding FP so that we can detect
@@ -298,7 +299,6 @@ enum cforth_primitive_ids
     ID_RESERVED07,
     ID_RESERVED08,
     ID_RESERVED09,
-    ID_RESERVED10,
     ID_FP_D_TO_F,
     ID_FP_FSTORE,
     ID_FP_FTIMES,
@@ -363,8 +363,11 @@ enum cforth_primitive_ids
 #define THROW_ABORT_QUOTE      (-2)
 #define THROW_STACK_OVERFLOW   (-3)
 #define THROW_STACK_UNDERFLOW  (-4)
+#define THROW_DICTIONARY_OVERFLOW (-8)
 #define THROW_UNDEFINED_WORD  (-13)
 #define THROW_EXECUTING       (-14)
+#define THROW_PARSED_STRING_OVERFLOW    (-18)
+#define THROW_DEFINITION_NAME_TOO_LONG  (-19)
 #define THROW_PAIRS           (-22)
 #define THROW_FLOAT_STACK_UNDERFLOW  ( -45)
 #define THROW_QUIT            (-56)

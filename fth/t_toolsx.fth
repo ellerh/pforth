@@ -53,7 +53,7 @@ include? }T{  t_tools.fth
 
 true fp-require-e !
 
-true value verbose
+false value verbose
 
 : testing
     verbose IF
@@ -236,17 +236,17 @@ T{ 1 2 2 3 4 5 3 NTR2 -> -1 1 2 2 -2 3 4 5 3 }T
 T{ 1 0 0 NTR2 -> 1 -1 0 -2 0 }T
 
 \ ------------------------------------------------------------------------------
-\ nyi TESTING SYNONYM
-\ nyi 
-\ nyi : SYN1 1234 ;
-\ nyi T{ SYNONYM NEW-SYN1 SYN1 -> }T
-\ nyi T{ NEW-SYN1 -> 1234 }T
-\ nyi : SYN2 2345 ; IMMEDIATE
-\ nyi T{ SYNONYM NEW-SYN2 SYN2 -> }T
-\ nyi T{ NEW-SYN2 -> 2345 }T
-\ nyi T{ : SYN3 SYN2 LITERAL ; SYN3 -> 2345 }T
+TESTING SYNONYM
 
-\ nyi \ ------------------------------------------------------------------------------
+: SYN1 1234 ;
+T{ SYNONYM NEW-SYN1 SYN1 -> }T
+T{ NEW-SYN1 -> 1234 }T
+: SYN2 2345 ; IMMEDIATE
+T{ SYNONYM NEW-SYN2 SYN2 -> }T
+T{ NEW-SYN2 -> 2345 }T
+T{ : SYN3 SYN2 LITERAL ; SYN3 -> 2345 }T
+
+\ ------------------------------------------------------------------------------
 \ nyi \ These tests require GET-CURRENT SET-CURRENT WORDLIST from the optional
 \ nyi \ Search-Order word set. If any of these are not available the tests
 \ nyi \ will be ignored
