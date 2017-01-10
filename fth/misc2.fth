@@ -246,6 +246,12 @@ private{
 0 invert constant max-u
 0 invert 1 rshift constant max-n
 
+\ Control stack items in pForth have the form: F ORIG or F DEST.
+2 constant CS_ITEM_SIZE
+
+\ -ROLL is for ROLL what -ROT is for ROT.
+: -ROLL ( xu .. x1 x0 u -- x0 xu .. x1 ) { u } u 0 ?DO u roll LOOP ;
+
 }private
 
 : ENVIRONMENT? ( c-addr u -- false | i*x true )
@@ -267,6 +273,37 @@ private{
     \ s" MAX-FLOAT"
     \ s" WORDLISTS"
     2drop false
+;
+
+: CS-PICK ( cs-itemu .. cs-item0 u -- cs-itemu .. cs-item0 cs-itemu )
+    1+ cs_item_size * 1- { index }
+    cs_item_size 0 ?DO index pick LOOP
+;
+
+: CS-ROLL ( cs-itemu .. cs-item0 u -- .. cs-item0  cs-itemu )
+    1+ cs_item_size * 1- { index }
+    cs_item_size 0 ?DO index roll LOOP
+;
+
+: [DEFINED] ( "name" -- flag ) bl word find nip 0<> ; immediate
+: [UNDEFINED] ( "name" -- flag ) bl word find nip 0= ; immediate
+
+: N>R ( n*x +n -- ) ( R: -- n*x +n )
+  r> swap dup                   ( return-address n n )
+  BEGIN dup WHILE               ( ... xi return-address n i ) ( r: xi+1 .. xn )
+      3 roll >r                 ( ... return-address n i ) ( r: xi xi+1 .. xn )
+      1-
+  REPEAT                        ( return-address n 0 ) ( r: x1 .. xn )
+  drop >r >r                    ( ) ( r: return-address n x1 .. xn )
+;
+
+: NR> ( -- n*x +n ) ( R: n*x +n -- )
+  r> r> dup                     ( return-address n n )
+  BEGIN dup WHILE               ( ... return-address n i )
+      r> 3 -roll                ( ... x return-address n i )
+      1-
+  REPEAT                        ( n*x return-address n 0 )
+  drop swap >r                  ( n*x n ) ( r: return-address )
 ;
 
 privatize
